@@ -7,18 +7,18 @@ from model import Model
 import sys
 
 models = [
-    # {
-    #     'location': 'models/obfuscated/saved_model_iter3.release', 
-    #     'name': 'obfs',
-    #     'obfuscated': True
-    # },
     {
-        'location': 'models/pretrained/saved_model_iter8.release', 
-        'name': 'pretr',
-        'obfuscated': False
-    }
+        'location': 'models/obfuscated/saved_model_iter3.release', 
+        'name': 'obfs',
+        'obfuscated': True
+    },
+    # {
+    #     'location': 'models/pretrained/saved_model_iter8.release', 
+    #     'name': 'pretr',
+    #     'obfuscated': False
+    # }
     ]
-dataset_dir = '/Users/rhyscompton/Documents/algs4-data-creator/princeton_dataset'
+dataset_dir = 'dataset/princeton_algs4'
 
 if __name__ == '__main__':
     # Loop through each model we have

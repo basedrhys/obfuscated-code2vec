@@ -46,40 +46,42 @@ class File2Vec:
         # Loop through each class value
         for class_val in os.listdir(folder_dir):
             # Get each file from each class
-            for file in os.listdir(os.path.join(folder_dir, class_val)):
-                method_vectors = []
-                # Split the file into its composing methods
-                methods = self.class_preprocessor.get_methods(os.path.join(folder_dir, class_val, file))
+            class_folder = os.path.join(folder_dir, class_val)
+            if os.path.isdir(class_folder):
+                for file in os.listdir(class_folder):
+                    method_vectors = []
+                    # Split the file into its composing methods
+                    methods = self.class_preprocessor.get_methods(os.path.join(folder_dir, class_val, file))
 
-                # for each of it's composing methods
-                for method in methods:
-                    lines = method.count('\n')
-                    # Spit it into a temp file
-                    try:
-                        with open(tmp_file_name, mode='w') as tmp_file:
-                            tmp_file.write(method)
-                    except Exception as e:
-                        print("{}\n{}".format(e, method))
-                    
-                    # Make the predictions 
-                    try:
-                        predict_lines, hash_to_string_dict = self.path_extractor.extract_paths(tmp_file_name)
-                    except ValueError as e:
-                        print("Error for method {} in file {}".format(method, file))
-                        continue
+                    # for each of it's composing methods
+                    for method in methods:
+                        lines = method.count('\n')
+                        # Spit it into a temp file
+                        try:
+                            with open(tmp_file_name, mode='w') as tmp_file:
+                                tmp_file.write(method)
+                        except Exception as e:
+                            print("{}\n{}".format(e, method))
+                        
+                        # Make the predictions 
+                        try:
+                            predict_lines, hash_to_string_dict = self.path_extractor.extract_paths(tmp_file_name)
+                        except ValueError as e:
+                            print("Error for method {} in file {}".format(method, file))
+                            continue
 
-                    results, code_vectors = self.model.predict(predict_lines)
-                    prediction_results = common.parse_results(results, hash_to_string_dict, topk=SHOW_TOP_CONTEXTS)
+                        results, code_vectors = self.model.predict(predict_lines)
+                        prediction_results = common.parse_results(results, hash_to_string_dict, topk=SHOW_TOP_CONTEXTS)
 
-                    # Process the predictions
-                    for i, method_prediction in enumerate(prediction_results):
-                        method_vectors.append({"vector": code_vectors[i], "length": lines})
-                    
-                file_vectors.append({'methods': method_vectors, 'class_val': class_val})
+                        # Process the predictions
+                        for i, method_prediction in enumerate(prediction_results):
+                            method_vectors.append({"vector": code_vectors[i], "length": lines})
+                        
+                    file_vectors.append({'methods': method_vectors, 'class_val': class_val})
 
-                print(fileNum)
-                fileNum += 1
-        
+                    print(fileNum)
+                    fileNum += 1
+            
         os.remove(tmp_file_name)
         return file_vectors
 
@@ -87,6 +89,7 @@ class File2Vec:
     def run_pipeline(self, file_vectors):
         for func in all_func:
             for method in all_methods:
+                print("Running {}, {}".format(func, method))
                 pipeline = AggregationPipeline(
                     self.model_info['name'],
                     agg_function=func,

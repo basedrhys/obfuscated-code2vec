@@ -2,12 +2,15 @@
 models/
 
 # Datasets
-dataset/
+java_files/
 
 # Weka files
 weka_files/
 
+*/.DS_STORE
 .DS_STORE
+
+.vscode/
 
 # Temp snippet
 tmpsnippet.java
