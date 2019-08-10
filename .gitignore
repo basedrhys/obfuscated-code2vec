@@ -1,3 +1,17 @@
+# Models
+models/
+
+# Datasets
+dataset/
+
+# Weka files
+weka_files/
+
+.DS_STORE
+
+# Temp snippet
+tmpsnippet.java
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
