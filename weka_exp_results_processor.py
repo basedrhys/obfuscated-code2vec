@@ -1,8 +1,8 @@
 import os
 import pandas as pd
 
-results_loc = 'A:\Rhys\Documents\Dropbox\Honours_staging\weka_output\opencv_spring.csv'
-output_file = 'A:\Rhys\Documents\Dropbox\Honours_staging\weka_output\opencv_spring_processed.csv'
+results_loc = 'A:\Rhys\Documents\Dropbox\Honours_staging\weka_output\princeton_liblinear.csv'
+output_file = 'A:\Rhys\Documents\Dropbox\Honours_staging\weka_output\princeton_liblinear_processed.csv'
 
 weka_df = pd.read_csv(results_loc)
 new_df = pd.DataFrame(columns=['model', 'selection_method', 'agg_method', 'reduction_method', 'accuracy', 'stddev'])
@@ -27,4 +27,4 @@ for i, row in weka_df.iterrows():
     }, ignore_index=True)
 
 with open(output_file, newline='', mode='w') as out_file:
-    new_df.to_csv(out_file)
+    new_df.to_csv(out_file, index=False)
