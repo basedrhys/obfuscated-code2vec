@@ -1,12 +1,12 @@
 from selection_methods import SelectAll
 from agg_functions import VectorMean
 from output_formats import ARFFFile
-from reduction_methods import NoReduction
+from reduction_methods import NoReduction, PCAReduction100
 import numpy as np
 
 class AggregationPipeline:
 
-  def __init__(self, model_name, selection_method = SelectAll, agg_function = VectorMean, dim_reduction = NoReduction, output_format = ARFFFile):
+  def __init__(self, model_name, selection_method = SelectAll, agg_function = VectorMean, dim_reduction = PCAReduction100, output_format = ARFFFile):
     self.model_name = model_name
     self.selection_method = selection_method
     self.agg_function = agg_function

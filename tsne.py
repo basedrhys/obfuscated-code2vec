@@ -24,29 +24,38 @@ from matplotlib.text import Annotation
 
 
 
-df = pd.read_csv('output_file_large.csv')
-df = df.sort_values(by = 'method_name')
+df = pd.read_csv('dataset.csv')
 num_instances = len(df.index)
 
-generated_labels = [row['method_name'] + ", " + row['file_name'] for i, row in df.iterrows()]
-
-feat_cols = df.columns[:-2]
+feat_cols = df.columns[:-1]
 print(feat_cols)
 
 print('Size of the dataframe: {}'.format(df.shape))
 
+# In[4]:
+
 # # For reproducability of the results
 # np.random.seed(42)
 # rndperm = np.random.permutation(df.shape[0])
-
-pca = PCA(n_components=3)
+n_components = 100
+pca = PCA(n_components=n_components)
 pca_result = pca.fit_transform(df[feat_cols].values)
 
-df['pca-one'] = pca_result[:,0]
-df['pca-two'] = pca_result[:,1] 
-df['pca-three'] = pca_result[:,2]
-print('Explained variation per principal component: {}'.format(pca.explained_variance_ratio_))
+# df['pca-one'] = pca_result[:,0]
+# df['pca-two'] = pca_result[:,1] 
+# df['pca-three'] = pca_result[:,2]
+print('Explained variation per principal component: {}'.format(np.sum(pca.explained_variance_ratio_)))
+print(pca_result)
+# In[]:
+new_cols = ['x{}'.format(i) for i in range(n_components)]
+new_df = pd.DataFrame(data=pca_result, columns=new_cols)
+new_df['class_val'] = df['class_val']
 
+print(new_df['class_val'])
+
+# In[]
+print(df['class_val'])
+# In[]
 fig = plt.figure(figsize=(16,10))
 method_name_count = df['method_name'].nunique()
 ax = None
