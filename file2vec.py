@@ -8,8 +8,8 @@ from agg_functions import all_func
 from common import common
 from extractor import Extractor
 from ClassPreprocessor import ClassPreprocessor
-from arff_file import ARFFFile
 from aggregation_pipeline import AggregationPipeline
+import pandas as pd
 
 SHOW_TOP_CONTEXTS = 10
 MAX_PATH_LENGTH = 8
@@ -89,12 +89,13 @@ class File2Vec:
     def run_pipeline(self, file_vectors):
         for func in all_func:
             for method in all_methods:
-                print("Running {}, {}".format(func, method))
+                print("Running {}, {}".format(func.name(), method.name()))
                 pipeline = AggregationPipeline(
                     self.model_info['name'],
                     agg_function=func,
                     selection_method=method)
-                
+
+
                 dataset = []
 
                 for file_vec in file_vectors:
@@ -102,6 +103,26 @@ class File2Vec:
                     aggregated = pipeline.aggregate_vectors(file_vec['methods'])
                     if len(aggregated) > 0:
                         dataset.append({'attributes': aggregated, 'class_val': file_vec['class_val']})
-        
+
+                # Set up the dataframe values to hold the resulting dataset
+                num_rows = len(dataset)
+                num_columns = len(dataset[0]['attributes'])
+                col_names = ['x{}'.format(i) for i in range(num_columns)] + ['class_val']
+
+                # Now we want to generate the dataframe from the aggregated results
+                rows_list = []
+                for file1 in dataset:
+                    dict1 = {}
+
+                    # Create the dict representing this file (row in the dataframe)
+                    for i, val in enumerate(file1['attributes']):
+                        this_col = col_names[i]
+                        dict1[this_col] = val
+                    
+                    dict1['class_val'] = file1['class_val']
+                    rows_list.append(dict1)
+
+                df = pd.DataFrame(data=rows_list, columns=col_names, index=range(num_rows))   
+
                 # Write the resulting vectors to an arff file
-                pipeline.process_dataset(dataset)
+                pipeline.process_dataset(df)

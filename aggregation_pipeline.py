@@ -1,7 +1,8 @@
 from selection_methods import SelectAll
 from agg_functions import VectorMean
-from arff_file import ARFFFile
+from output_formats import ARFFFile
 from reduction_methods import NoReduction
+import numpy as np
 
 class AggregationPipeline:
 
@@ -26,10 +27,10 @@ class AggregationPipeline:
     else:
       return []
 
-  def process_dataset(self, dataset):
+  def process_dataset(self, df):
     # Reduce the dimensionality of the dataset
-    reducer = self.dim_reduction(dataset)
-    reduced_dim_dataset = reducer.reduce()
+    reducer = self.dim_reduction(df)
+    reduced_dim_df = reducer.reduce()
 
     # Output it in the desired format
     wf = ARFFFile(
@@ -37,7 +38,7 @@ class AggregationPipeline:
         self.selection_method.name(), 
         self.agg_function.name(), 
         self.dim_reduction.name(),
-        reduced_dim_dataset)
+        df)
     wf.write_to_file()
 
 

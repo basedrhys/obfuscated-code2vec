@@ -17,8 +17,13 @@ models = [
         'name': 'obfs',
         'obfuscated': True
     },
+    # {
+    #     'location': 'models/obfuscated/saved_model_iter3.release', 
+    #     'name': 'obfsn',
+    #     'obfuscated': False
+    # },
     ]
-dataset_dir = 'java_files/princeton_algs4'
+dataset_dir = 'java_files/opencv_spring'
 
 if __name__ == '__main__':
     # Loop through each model we have
