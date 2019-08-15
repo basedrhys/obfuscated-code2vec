@@ -40,6 +40,7 @@ class AggregationPipeline:
         self.dim_reduction.name(),
         df)
     wf.write_to_file()
+    exit()
 
 
 

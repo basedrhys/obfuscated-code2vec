@@ -23,7 +23,7 @@ models = [
     #     'obfuscated': False
     # },
     ]
-dataset_dir = 'java_files/opencv_spring'
+dataset_dir = 'java_files/princeton_algs4'
 
 if __name__ == '__main__':
     # Loop through each model we have

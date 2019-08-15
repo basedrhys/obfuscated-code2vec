@@ -124,5 +124,8 @@ class File2Vec:
 
                 df = pd.DataFrame(data=rows_list, columns=col_names, index=range(num_rows))   
 
+                with open('dataset.csv', newline='', mode='w') as out_file:
+                    df.to_csv(out_file, index=False)
+
                 # Write the resulting vectors to an arff file
                 pipeline.process_dataset(df)

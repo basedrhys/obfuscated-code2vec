@@ -39,15 +39,7 @@ class PCAReduction(AbstractReductionMethod):
 
   def reduce(self):
     # Create a dataframe from the dataset
-    num_columns = len(self.dataset[0]['attributes'])
-    col_names = ['x{}'.format(i) for i in range(num_columns)]
-    data = [i['attributes'] for i in self.dataset]
-
-    df = pd.DataFrame(data=data, columns=col_names)
-
-    print(df.head())
-    return df
-
+    return self.df
 
 # new_arr = np.load('data.npy', allow_pickle=True)
 
