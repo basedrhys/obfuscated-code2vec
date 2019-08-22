@@ -37,7 +37,7 @@ class NoReduction(AbstractReductionMethod):
 class AbstractUMap(AbstractReductionMethod):
   def __init__(self, df, k):
     # We can't have K be more than the # of instances
-    if k > df.shape[0]:
+    if k > df.shape[0] - 2:
       k = df.shape[0] - 2
 
     self.k = k
@@ -46,7 +46,7 @@ class AbstractUMap(AbstractReductionMethod):
   def reduce(self):
     reducer = umap.UMAP(n_components=self.k)
 
-    embedding = reducer.fit_transform(self.df.iloc[:,:-1])
+    embedding = reducer.fit_transform(self.df.iloc[:,:-2])
 
     # Convert the embedding (numpy array) back into a dataframe
     feat_cols = ["x{}".format(i) for i in range(embedding.shape[1])]

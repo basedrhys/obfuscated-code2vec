@@ -22,7 +22,7 @@ models = [
     #     'obfuscated': False
     # },
     ]
-dataset_dir = 'java_files/princeton'
+dataset_dir = 'java_files/test'
 
 if __name__ == '__main__':
     # Loop through each model we have

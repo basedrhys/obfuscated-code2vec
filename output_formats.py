@@ -17,11 +17,14 @@ class ARFFFile:
         file.write("{}\n".format(text))
 
     def write_attributes(self, file):
-        # Last column is class value
-        num_features = len(self.df.columns[:-1])
+        # Ignore file name and class value
+        num_features = len(self.df.columns[:-2])
 
         for i in range(num_features):
             self.write_line(file, "@ATTRIBUTE x{} NUMERIC".format(i))
+
+    def write_filename(self, file):
+        self.write_line(file, "@ATTRIBUTE filename STRING")
 
     def write_class_attribute(self, file):
         class_vals = set()
@@ -52,6 +55,9 @@ class ARFFFile:
 
             # Write each attribute
             self.write_attributes(open_file)
+
+            # Write the filename
+            self.write_filename(open_file)
 
             # Write the class attribute
             self.write_class_attribute(open_file)

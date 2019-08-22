@@ -78,7 +78,7 @@ class File2Vec:
                         for i, method_prediction in enumerate(prediction_results):
                             method_vectors.append({"vector": code_vectors[i], "length": lines})
                         
-                    file_vectors.append({'methods': method_vectors, 'class_val': class_val})
+                    file_vectors.append({'methods': method_vectors, 'class_val': class_val, 'filename': file})
 
                     print(fileNum)
                     fileNum += 1
@@ -99,36 +99,39 @@ class File2Vec:
                         reduction_method=reduction_method)
 
 
-                    dataset = []
+                    # dataset = []
 
-                    for file_vec in file_vectors:
+                    for file_ in file_vectors:
                         # Apply the aggregation function now we have collected all the individual vectors from each method
-                        aggregated = pipeline.aggregate_vectors(file_vec['methods'])
+                        aggregated = pipeline.aggregate_vectors(file_['methods'])
                         if len(aggregated) > 0:
-                            dataset.append({'attributes': aggregated, 'class_val': file_vec['class_val']})
+                            file_['attributes'] = aggregated
+                            # dataset.append({'attributes': aggregated, 'class_val': file_vec['class_val'], 
+                                # 'filename': file_vec['filename']})
 
                     # Set up the dataframe values to hold the resulting dataset
-                    num_rows = len(dataset)
-                    num_columns = len(dataset[0]['attributes'])
-                    col_names = ['x{}'.format(i) for i in range(num_columns)] + ['class_val']
+                    num_rows = len(file_vectors)
+                    num_columns = len(file_vectors[0]['attributes'])
+                    col_names = ['x{}'.format(i) for i in range(num_columns)] + ['filename', 'class_val']
 
                     # Now we want to generate the dataframe from the aggregated results
                     rows_list = []
-                    for file1 in dataset:
+                    for file_ in file_vectors:
                         dict1 = {}
 
                         # Create the dict representing this file (row in the dataframe)
-                        for i, val in enumerate(file1['attributes']):
+                        for i, val in enumerate(file_['attributes']):
                             this_col = col_names[i]
                             dict1[this_col] = val
-                        
-                        dict1['class_val'] = file1['class_val']
+
+                        dict1['filename'] = file_['filename']
+                        dict1['class_val'] = file_['class_val']
                         rows_list.append(dict1)
 
                     df = pd.DataFrame(data=rows_list, columns=col_names, index=range(num_rows))   
 
-                    with open('dataset.csv', newline='', mode='w') as out_file:
-                        df.to_csv(out_file, index=False)
+                    # with open('dataset.csv', newline='', mode='w') as out_file:
+                    #     df.to_csv(out_file, index=False)
 
                     # Write the resulting vectors to an arff file
                     pipeline.process_dataset(df)
