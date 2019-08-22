@@ -1,16 +1,16 @@
 from selection_methods import SelectAll
 from agg_functions import VectorMean
 from output_formats import ARFFFile
-from reduction_methods import NoReduction, PCAReduction100
+from reduction_methods import NoReduction
 import numpy as np
 
 class AggregationPipeline:
 
-  def __init__(self, model_name, selection_method = SelectAll, agg_function = VectorMean, dim_reduction = PCAReduction100, output_format = ARFFFile):
+  def __init__(self, model_name, selection_method = SelectAll, agg_function = VectorMean, reduction_method = NoReduction, output_format = ARFFFile):
     self.model_name = model_name
     self.selection_method = selection_method
     self.agg_function = agg_function
-    self.dim_reduction = dim_reduction
+    self.reduction_method = reduction_method
     self.output_format = output_format
 
   def aggregate_vectors(self, vectors):
@@ -29,7 +29,7 @@ class AggregationPipeline:
 
   def process_dataset(self, df):
     # Reduce the dimensionality of the dataset
-    reducer = self.dim_reduction(df)
+    reducer = self.reduction_method(df)
     reduced_dim_df = reducer.reduce()
 
     # Output it in the desired format
@@ -37,11 +37,9 @@ class AggregationPipeline:
         self.model_name, 
         self.selection_method.name(), 
         self.agg_function.name(), 
-        self.dim_reduction.name(),
-        df)
+        self.reduction_method.name(),
+        reduced_dim_df)
     wf.write_to_file()
-    exit()
-
 
 
 

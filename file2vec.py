@@ -3,8 +3,9 @@ import os
 import csv
 import tempfile
 
-from selection_methods import all_methods
+from selection_methods import selection_methods
 from agg_functions import all_func
+from reduction_methods import reduction_methods
 from common import common
 from extractor import Extractor
 from ClassPreprocessor import ClassPreprocessor
@@ -88,44 +89,46 @@ class File2Vec:
 
     def run_pipeline(self, file_vectors):
         for func in all_func:
-            for method in all_methods:
-                print("Running {}, {}".format(func.name(), method.name()))
-                pipeline = AggregationPipeline(
-                    self.model_info['name'],
-                    agg_function=func,
-                    selection_method=method)
+            for selection_method in selection_methods:
+                for reduction_method in reduction_methods:
+                    print("Running {}, {}, {}".format(func.name(), selection_method.name(), reduction_method.name()))
+                    pipeline = AggregationPipeline(
+                        self.model_info['name'],
+                        agg_function=func,
+                        selection_method=selection_method,
+                        reduction_method=reduction_method)
 
 
-                dataset = []
+                    dataset = []
 
-                for file_vec in file_vectors:
-                    # Apply the aggregation function now we have collected all the individual vectors from each method
-                    aggregated = pipeline.aggregate_vectors(file_vec['methods'])
-                    if len(aggregated) > 0:
-                        dataset.append({'attributes': aggregated, 'class_val': file_vec['class_val']})
+                    for file_vec in file_vectors:
+                        # Apply the aggregation function now we have collected all the individual vectors from each method
+                        aggregated = pipeline.aggregate_vectors(file_vec['methods'])
+                        if len(aggregated) > 0:
+                            dataset.append({'attributes': aggregated, 'class_val': file_vec['class_val']})
 
-                # Set up the dataframe values to hold the resulting dataset
-                num_rows = len(dataset)
-                num_columns = len(dataset[0]['attributes'])
-                col_names = ['x{}'.format(i) for i in range(num_columns)] + ['class_val']
+                    # Set up the dataframe values to hold the resulting dataset
+                    num_rows = len(dataset)
+                    num_columns = len(dataset[0]['attributes'])
+                    col_names = ['x{}'.format(i) for i in range(num_columns)] + ['class_val']
 
-                # Now we want to generate the dataframe from the aggregated results
-                rows_list = []
-                for file1 in dataset:
-                    dict1 = {}
+                    # Now we want to generate the dataframe from the aggregated results
+                    rows_list = []
+                    for file1 in dataset:
+                        dict1 = {}
 
-                    # Create the dict representing this file (row in the dataframe)
-                    for i, val in enumerate(file1['attributes']):
-                        this_col = col_names[i]
-                        dict1[this_col] = val
-                    
-                    dict1['class_val'] = file1['class_val']
-                    rows_list.append(dict1)
+                        # Create the dict representing this file (row in the dataframe)
+                        for i, val in enumerate(file1['attributes']):
+                            this_col = col_names[i]
+                            dict1[this_col] = val
+                        
+                        dict1['class_val'] = file1['class_val']
+                        rows_list.append(dict1)
 
-                df = pd.DataFrame(data=rows_list, columns=col_names, index=range(num_rows))   
+                    df = pd.DataFrame(data=rows_list, columns=col_names, index=range(num_rows))   
 
-                with open('dataset.csv', newline='', mode='w') as out_file:
-                    df.to_csv(out_file, index=False)
+                    with open('dataset.csv', newline='', mode='w') as out_file:
+                        df.to_csv(out_file, index=False)
 
-                # Write the resulting vectors to an arff file
-                pipeline.process_dataset(df)
+                    # Write the resulting vectors to an arff file
+                    pipeline.process_dataset(df)

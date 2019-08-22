@@ -7,6 +7,7 @@ from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import seaborn as sns
+import umap
 
 # import the main drawing library
 from matplotlib.widgets import Button
@@ -33,56 +34,88 @@ class NoReduction(AbstractReductionMethod):
   def name():
     return "none"
 
-class AbstractPCA(AbstractReductionMethod):
+class AbstractUMap(AbstractReductionMethod):
   def __init__(self, df, k):
+    # We can't have K be more than the # of instances
+    if k > df.shape[0]:
+      k = df.shape[0] - 2
+
     self.k = k
     return super().__init__(df)
 
   def reduce(self):
-    feat_cols = self.df.columns[:-1]  
+    reducer = umap.UMAP(n_components=self.k)
 
-    pca = PCA(self.k)
-    pca_result = pca.fit_transform(self.df[feat_cols].values)
+    embedding = reducer.fit_transform(self.df.iloc[:,:-1])
 
-    print("{} components explain {} variance"
-    .format(self.k, np.sum(pca.explained_variance_ratio_)))
+    # Convert the embedding (numpy array) back into a dataframe
+    feat_cols = ["x{}".format(i) for i in range(embedding.shape[1])]
 
-    # Construct the new dataframe from the reduced dimensions
-    new_cols = ['x{}'.format(i) for i in range(self.k)]
-    new_df = pd.DataFrame(data=pca_result, columns=new_cols)
-    new_df['class_val'] = self.df['class_val']
+    return_df = pd.DataFrame(data=embedding, columns = feat_cols)
+    return_df['class_val'] = self.df['class_val']
+    
+    return return_df
 
-    return new_df
+class UMapReduction25(AbstractUMap):
+  def __init__(self, df):
+    return super().__init__(df, 25)
 
-class PCAReduction50(AbstractPCA):
+  @staticmethod
+  def name():
+    return "UMap25"
+
+class UMapReduction50(AbstractUMap):
   def __init__(self, df):
     return super().__init__(df, 50)
 
   @staticmethod
   def name():
-    return "PCA50"
+    return "UMap50"
 
-class PCAReduction100(AbstractPCA):
+class UMapReduction100(AbstractUMap):
   def __init__(self, df):
     return super().__init__(df, 100)
 
   @staticmethod
   def name():
-    return "PCA100"
+    return "UMap100"
+
+class UMapReduction250(AbstractUMap):
+  def __init__(self, df):
+    return super().__init__(df, 250)
+
+  @staticmethod
+  def name():
+    return "UMap250"
+
+reduction_methods = [
+  NoReduction,
+  UMapReduction25,
+  UMapReduction50,
+  UMapReduction100,
+  UMapReduction250
+]
 
 
-# n_cols = 500
-# n_instances = 200
+# n_cols = 362
+# n_instances = 150
 
 # cols = ['x{}'.format(x) for x in range(n_cols)]
 # data = np.random.rand(n_instances, n_cols)
 
-# labels = ['ok' for x in range(n_instances)]
+# labels = ['ok' if x < 100 else "not ok" for x in range(n_instances)]
 
 # df = pd.DataFrame(data=data, columns=cols)
 # df['class_val'] = labels
 
-
+# umapTest = UMapReduction50(df)
+# res = umapTest.reduce()
+# umapTest = UMapReduction100(df)
+# res = umapTest.reduce()
+# print(res)
+# umapTest = UMapReduction250(df)
+# res = umapTest.reduce()
+# print(res)
 # pca_test = PCAReduction100(df)
 # res = pca_test.reduce()
 

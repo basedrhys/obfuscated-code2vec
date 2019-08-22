@@ -122,14 +122,14 @@ class SelectTop5(SelectTopK):
   def name():
     return "top5"
 
-all_methods = [
-  SelectAll,
-  SelectRandom1,
-  SelectRandom2,
-  SelectRandom3,
-  SelectRandom5,
-  SelectTop1,
-  SelectTop2,
-  SelectTop3,
-  SelectTop5
+selection_methods = [
+  SelectAll
+  # SelectRandom1,
+  # SelectRandom2,
+  # SelectRandom3,
+  # SelectRandom5,
+  # SelectTop1,
+  # SelectTop2,
+  # SelectTop3,
+  # SelectTop5
 ]
