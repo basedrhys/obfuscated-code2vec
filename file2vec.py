@@ -2,6 +2,7 @@ import traceback
 import os
 import csv
 import tempfile
+import time
 
 from selection_methods import selection_methods
 from agg_functions import all_func
@@ -50,6 +51,7 @@ class File2Vec:
             class_folder = os.path.join(folder_dir, class_val)
             if os.path.isdir(class_folder):
                 for file in os.listdir(class_folder):
+                    time0 = time.time()
                     method_vectors = []
                     # Split the file into its composing methods
                     methods = self.class_preprocessor.get_methods(os.path.join(folder_dir, class_val, file))
@@ -80,7 +82,7 @@ class File2Vec:
                         
                     file_vectors.append({'methods': method_vectors, 'class_val': class_val, 'filename': file})
 
-                    print(fileNum)
+                    print(fileNum, "Time:", time.time() - time0)
                     fileNum += 1
             
         os.remove(tmp_file_name)
