@@ -8,21 +8,32 @@ from sys import argv
 
 models = [
     {
-        'location': 'models/pretrained/saved_model_iter8.release', 
+        'location': '/Scratch/model_chkpts/java14m_trainable/saved_model_iter8', 
         'name': 'pretr',
         'obfuscated': False
     },
     {
-        'location': 'models/obfuscated/saved_model_iter3.release', 
+        'location': '/Scratch/model_chkpts/java14m_trainable/saved_model_iter8', 
+        'name': 'pretO',
+        'obfuscated': True
+    },
+    {
+        'location': '/Scratch/model_chkpts/standard/saved_model_iter2', 
+        'name': 'std',
+        'obfuscated': False
+    },
+    {
+        'location': '/Scratch/model_chkpts/obfuscated/saved_model_iter3', 
         'name': 'obfs',
         'obfuscated': True
-    }
-    # {
-    #     'location': 'models/obfuscated/saved_model_iter3.release', 
-    #     'name': 'obfsn',
-    #     'obfuscated': False
-    # },
+    },
+    {
+        'location': '/Scratch/model_chkpts/reduced/saved_model_iter2', 
+        'name': 'reduc',
+        'obfuscated': False
+    },
     ]
+
 dataset_dir = 'java_files/'
 
 if __name__ == '__main__':
@@ -42,14 +53,3 @@ if __name__ == '__main__':
         file2vec.run()
 
     modelObj.close_session()
-        
-        
-
-
-
-
-# snippet_vectors = [[0.2152, 5215, 12], [1, 1, 1], [5211, 5.215, 5215]]
-
-# for method in agg_methods:
-#     vec = method(snippet_vectors)
-#     print(vec.aggregate())
