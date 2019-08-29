@@ -123,18 +123,19 @@ class File2Vec:
                     # Now we want to generate the dataframe from the aggregated results
                     rows_list = []
                     for file_ in file_vectors:
-                        dict1 = {}
+                        if 'attributes' in file_:
+                            dict1 = {}
 
-                        # Create the dict representing this file (row in the dataframe)
-                        for i, val in enumerate(file_['attributes']):
-                            this_col = col_names[i]
-                            dict1[this_col] = val
+                            # Create the dict representing this file (row in the dataframe)
+                            for i, val in enumerate(file_['attributes']):
+                                this_col = col_names[i]
+                                dict1[this_col] = val
 
-                        dict1['filename'] = file_['filename']
-                        dict1['class_val'] = file_['class_val']
-                        rows_list.append(dict1)
+                            dict1['filename'] = file_['filename']
+                            dict1['class_val'] = file_['class_val']
+                            rows_list.append(dict1)
 
-                    df = pd.DataFrame(data=rows_list, columns=col_names, index=range(num_rows))   
+                    df = pd.DataFrame(data=rows_list, columns=col_names)   
 
                     # with open('dataset.csv', newline='', mode='w') as out_file:
                     #     df.to_csv(out_file, index=False)
