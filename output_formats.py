@@ -6,7 +6,8 @@ output_folder = 'weka_files'
 
 class ARFFFile:
 
-    def __init__(self, model_name, selection_name, agg_name, reduce_name, df):
+    def __init__(self, dataset_name, model_name, selection_name, agg_name, reduce_name, df):
+        self.dataset_name = dataset_name
         self.model_name = model_name
         self.selection_name = selection_name
         self.agg_name = agg_name
@@ -40,10 +41,12 @@ class ARFFFile:
             self.write_line(file, row['concat'])
 
     def write_to_file(self):
-        if not os.path.exists(output_folder):
-            os.mkdir(output_folder)
+        full_output_path = os.path.join(output_folder, self.dataset_name)
+        if not os.path.exists(full_output_path):
+            os.makedirs(full_output_path)
 
-        filename = '{}_{}_{}_{}'.format(
+        filename = '{}/{}_{}_{}_{}'.format(
+            self.dataset_name,
             self.model_name, 
             self.selection_name, 
             self.agg_name,

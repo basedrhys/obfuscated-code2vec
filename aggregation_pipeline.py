@@ -6,7 +6,8 @@ import numpy as np
 
 class AggregationPipeline:
 
-  def __init__(self, model_name, selection_method = SelectAll, agg_function = VectorMean, reduction_method = NoReduction, output_format = ARFFFile):
+  def __init__(self, dataset_name, model_name, selection_method = SelectAll, agg_function = VectorMean, reduction_method = NoReduction, output_format = ARFFFile):
+    self.dataset_name = dataset_name
     self.model_name = model_name
     self.selection_method = selection_method
     self.agg_function = agg_function
@@ -34,6 +35,7 @@ class AggregationPipeline:
 
     # Output it in the desired format
     wf = ARFFFile(
+        self.dataset_name,
         self.model_name, 
         self.selection_method.name(), 
         self.agg_function.name(), 

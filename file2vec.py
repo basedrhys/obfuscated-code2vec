@@ -12,6 +12,8 @@ from extractor import Extractor
 from ClassPreprocessor import ClassPreprocessor
 from aggregation_pipeline import AggregationPipeline
 import pandas as pd
+# from main import dataset_dir
+dataset_dir = 'java_files'
 
 SHOW_TOP_CONTEXTS = 10
 MAX_PATH_LENGTH = 8
@@ -43,6 +45,7 @@ class File2Vec:
         self.run_pipeline(file_vectors)
 
     def create_file_vectors(self, folder_dir):
+        folder_dir = os.path.join(dataset_dir, folder_dir)
         file_vectors = []
         fileNum = 0
         # Loop through each class value
@@ -95,7 +98,8 @@ class File2Vec:
                 for reduction_method in reduction_methods:
                     print("Running {}, {}, {}".format(func.name(), selection_method.name(), reduction_method.name()))
                     pipeline = AggregationPipeline(
-                        self.model_info['name'],
+                        dataset_name=self.data_dir,
+                        model_name=self.model_info['name'],
                         agg_function=func,
                         selection_method=selection_method,
                         reduction_method=reduction_method)
