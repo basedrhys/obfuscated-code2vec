@@ -45,14 +45,13 @@ class ARFFFile:
         if not os.path.exists(full_output_path):
             os.makedirs(full_output_path)
 
-        filename = '{}/{}_{}_{}_{}'.format(
-            self.dataset_name,
+        filename = '{}_{}_{}_{}'.format(
             self.model_name, 
             self.selection_name, 
             self.agg_name,
             self.reduce_name)
 
-        with open(os.path.join(output_folder, filename + ".arff"), mode='w') as open_file:
+        with open(os.path.join(output_folder, self.dataset_name, filename + ".arff"), mode='w') as open_file:
             # Write the relation header
             self.write_line(open_file, "@RELATION {}\n\n".format(filename))
 
