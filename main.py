@@ -5,34 +5,7 @@ from argparse import ArgumentParser
 from file2vec import File2Vec
 from model import Model
 from sys import argv
-
-models = [
-    {
-        'location': '/Scratch/model_chkpts/java14m_trainable/saved_model_iter8', 
-        'name': 'pretr',
-        'obfuscated': False
-    },
-    {
-        'location': '/Scratch/model_chkpts/java14m_trainable/saved_model_iter8', 
-        'name': 'pretO',
-        'obfuscated': True
-    },
-    {
-        'location': '/Scratch/model_chkpts/standard/saved_model_iter2', 
-        'name': 'std',
-        'obfuscated': False
-    },
-    {
-        'location': '/Scratch/model_chkpts/obfuscated/saved_model_iter3', 
-        'name': 'obfs',
-        'obfuscated': True
-    },
-    {
-        'location': '/Scratch/model_chkpts/reduced/saved_model_iter2', 
-        'name': 'reduc',
-        'obfuscated': False
-    },
-    ]
+from model_defs import models
 
 dataset_dir = 'java_files/'
 
