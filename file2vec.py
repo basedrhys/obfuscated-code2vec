@@ -117,7 +117,12 @@ class File2Vec:
 
                     # Set up the dataframe values to hold the resulting dataset
                     num_rows = len(file_vectors)
-                    num_columns = len(file_vectors[0]['attributes'])
+                    num_columns = 0
+                    for i in file_vectors:
+                        if 'attributes' in i:
+                            num_columns = len(i['attributes'])
+                            break
+                            
                     col_names = ['x{}'.format(i) for i in range(num_columns)] + ['filename', 'class_val']
 
                     # Now we want to generate the dataframe from the aggregated results
