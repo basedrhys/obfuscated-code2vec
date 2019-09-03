@@ -80,38 +80,8 @@ class UMapReduction250(AbstractUMap):
 
 reduction_methods = [
   NoReduction,
-  UMapReduction25,
-  UMapReduction50,
-  UMapReduction100,
-  UMapReduction250
+  # UMapReduction25,
+  # UMapReduction50,
+  # UMapReduction100,
+  # UMapReduction250
 ]
-
-
-# n_cols = 362
-# n_instances = 150
-
-# cols = ['x{}'.format(x) for x in range(n_cols)]
-# data = np.random.rand(n_instances, n_cols)
-
-# labels = ['ok' if x < 100 else "not ok" for x in range(n_instances)]
-
-# df = pd.DataFrame(data=data, columns=cols)
-# df['class_val'] = labels
-
-# umapTest = UMapReduction50(df)
-# res = umapTest.reduce()
-# umapTest = UMapReduction100(df)
-# res = umapTest.reduce()
-# print(res)
-# umapTest = UMapReduction250(df)
-# res = umapTest.reduce()
-# print(res)
-# pca_test = PCAReduction100(df)
-# res = pca_test.reduce()
-
-# print(res)
-
-# new_arr = np.load('data.npy', allow_pickle=True)
-
-# pca = PCAReduction(new_arr)
-# pca.reduce()

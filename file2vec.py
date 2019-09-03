@@ -19,7 +19,7 @@ SHOW_TOP_CONTEXTS = 10
 MAX_PATH_LENGTH = 8
 MAX_PATH_WIDTH = 2
 EXTRACTOR_JAR_PATH = 'JavaExtractor/JPredict/target/JavaExtractor-0.0.1-SNAPSHOT.jar'
-CLASS_PREPROCESS_JAR_PATH = 'ClassPreprocess.jar'
+CLASS_PREPROCESS_JAR_PATH = 'java-tool.jar'
 tmp_file_name = "tmpsnippet.java"
 
 class File2Vec:
@@ -34,7 +34,7 @@ class File2Vec:
                                         max_path_length=MAX_PATH_LENGTH,
                                         max_path_width=MAX_PATH_WIDTH)
 
-        self.class_preprocessor = ClassPreprocessor(CLASS_PREPROCESS_JAR_PATH, model_info['obfuscated'])
+        self.class_preprocessor = ClassPreprocessor(CLASS_PREPROCESS_JAR_PATH, model_info['args'])
 
     def read_file(self, input_filename):
         with open(input_filename, 'r') as file:
