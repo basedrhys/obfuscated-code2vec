@@ -38,7 +38,7 @@ class ARFFFile:
         self.write_line(file, "\n\n@DATA")
         self.df['concat'] = pd.Series(self.df.values.tolist()).map(lambda x: ','.join(map(str,x)))
         for i, row in self.df.iterrows():
-            self.write_line(file, row['concat'].replace(' ', ''))
+            self.write_line(file, row['concat'].replace(' ', '').replace(',', ''))
 
     def write_to_file(self):
         full_output_path = os.path.join(output_folder, self.dataset_name)
