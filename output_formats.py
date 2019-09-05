@@ -1,8 +1,13 @@
 import os
 import numpy as np
 import pandas as pd
+import re
 
 output_folder = 'weka_files'
+
+
+def sanitize(x):
+    return re.sub(r'[^\w\-_.]', '', str(x))
 
 class ARFFFile:
 
@@ -36,9 +41,9 @@ class ARFFFile:
 
     def write_data(self, file):
         self.write_line(file, "\n\n@DATA")
-        self.df['concat'] = pd.Series(self.df.values.tolist()).map(lambda x: ','.join(map(str,x)))
+        self.df['concat'] = pd.Series(self.df.values.tolist()).map(lambda x: ','.join(map(sanitize,x)))
         for i, row in self.df.iterrows():
-            self.write_line(file, row['concat'].replace(' ', '').replace(',', ''))
+            self.write_line(file, row['concat'])
 
     def write_to_file(self):
         full_output_path = os.path.join(output_folder, self.dataset_name)
