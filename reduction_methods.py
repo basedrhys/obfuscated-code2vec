@@ -80,8 +80,8 @@ class UMapReduction250(AbstractUMap):
 
 reduction_methods = [
   NoReduction,
-  # UMapReduction25,
-  # UMapReduction50,
-  # UMapReduction100,
-  # UMapReduction250
+  #UMapReduction25,
+  #UMapReduction50,
+  #UMapReduction100,
+  #UMapReduction250
 ]

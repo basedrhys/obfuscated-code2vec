@@ -10,7 +10,6 @@ class ClassPreprocessor:
 
         result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-        print(result)
         try:
             return result.stdout.decode('utf-8').split("_METHOD_SPLIT_")
         except:
