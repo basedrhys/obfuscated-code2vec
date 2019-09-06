@@ -1,8 +1,12 @@
 import os
 import pandas as pd
+import sys
 
-results_loc = 'A:\Rhys\Documents\Dropbox\Honours_staging\weka_output\Final Runs\princeton.csv'
-output_file = 'A:\Rhys\Documents\Dropbox\Honours_staging\weka_output\Final Runs\princeton_processed.csv'
+results_loc = sys.argv[1]
+if len(sys.argv) > 2:
+    output_file = sys.argv[2]
+else:
+    output_file = results_loc.split('.csv')[0] + '_processed.csv'
 
 weka_df = pd.read_csv(results_loc)
 new_df = pd.DataFrame(columns=['model', 'selection_method', 'agg_method', 'reduction_method', 'accuracy', 'stddev'])
