@@ -88,7 +88,7 @@ class File2Vec:
                     print(fileNum, "Time:", time.time() - time0)
                     fileNum += 1
             
-        os.remove(tmp_file_name)
+        #os.remove(tmp_file_name)
         return file_vectors
 
 

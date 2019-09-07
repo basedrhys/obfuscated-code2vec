@@ -124,12 +124,12 @@ class SelectTop5(SelectTopK):
 
 selection_methods = [
   SelectAll,
-  SelectRandom1,
-  SelectRandom2,
-  SelectRandom3,
-  SelectRandom5,
-  SelectTop1,
-  SelectTop2,
-  SelectTop3,
-  SelectTop5
+  #SelectRandom1,
+  #SelectRandom2,
+  #SelectRandom3,
+  #SelectRandom5,
+  #SelectTop1,
+  #SelectTop2,
+  #SelectTop3,
+  #SelectTop5
 ]
