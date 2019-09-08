@@ -3,6 +3,7 @@ import os
 import csv
 import tempfile
 import time
+import random
 
 from selection_methods import selection_methods
 from agg_functions import all_func
@@ -22,9 +23,11 @@ EXTRACTOR_JAR_PATH = 'JavaExtractor/JPredict/target/JavaExtractor-0.0.1-SNAPSHOT
 CLASS_PREPROCESS_JAR_PATH = 'java-tool.jar'
 tmp_file_name = "tmpsnippet.java"
 
+debug=False
+
 class File2Vec:
 
-    def __init__(self, config, model, model_info, data_dir):
+    def __init__(self, config, model, model_info, data_dir, k=2000):
         self.model = model
         self.model_info = model_info
         self.config = config
@@ -33,6 +36,7 @@ class File2Vec:
                                         jar_path=EXTRACTOR_JAR_PATH,
                                         max_path_length=MAX_PATH_LENGTH,
                                         max_path_width=MAX_PATH_WIDTH)
+        self.k = k
 
         self.class_preprocessor = ClassPreprocessor(CLASS_PREPROCESS_JAR_PATH, model_info['args'])
 
@@ -53,7 +57,13 @@ class File2Vec:
             # Get each file from each class
             class_folder = os.path.join(folder_dir, class_val)
             if os.path.isdir(class_folder):
-                for file in os.listdir(class_folder):
+                file_list = os.listdir(class_folder)
+
+                # Limit the number of files per class
+                if len(file_list) > self.k:
+                    file_list = random.sample(file_list, self.k)
+                
+                for file in file_list:
                     time0 = time.time()
                     method_vectors = []
                     # Split the file into its composing methods
@@ -61,19 +71,23 @@ class File2Vec:
 
                     # for each of it's composing methods
                     for method in methods:
+                        # Get number of lines in the method
                         lines = method.count('\n')
+                            
                         # Spit it into a temp file
                         try:
                             with open(tmp_file_name, mode='w') as tmp_file:
                                 tmp_file.write(method)
                         except Exception as e:
-                            print("{}\n{}".format(e, method))
+                            if debug:
+                                print("{}\n{}".format(e, method))
                         
                         # Make the predictions 
                         try:
                             predict_lines, hash_to_string_dict = self.path_extractor.extract_paths(tmp_file_name)
                         except ValueError as e:
-                            print("Error for method {} in file {}".format(method, file))
+                            if debug:
+                                print("Error for method {} in file {}".format(method, file))
                             continue
 
                         results, code_vectors = self.model.predict(predict_lines)
@@ -85,7 +99,7 @@ class File2Vec:
                         
                     file_vectors.append({'methods': method_vectors, 'class_val': class_val, 'filename': file})
 
-                    print(fileNum, "Time:", time.time() - time0)
+                    print(fileNum, file, "Time:", time.time() - time0)
                     fileNum += 1
             
         #os.remove(tmp_file_name)
