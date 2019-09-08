@@ -4,6 +4,7 @@ import csv
 import tempfile
 import time
 import random
+import re
 
 from selection_methods import selection_methods
 from agg_functions import all_func
@@ -13,6 +14,7 @@ from extractor import Extractor
 from ClassPreprocessor import ClassPreprocessor
 from aggregation_pipeline import AggregationPipeline
 import pandas as pd
+import numpy as np
 # from main import dataset_dir
 dataset_dir = 'java_files'
 
@@ -40,9 +42,18 @@ class File2Vec:
 
         self.class_preprocessor = ClassPreprocessor(CLASS_PREPROCESS_JAR_PATH, model_info['args'])
 
+        self.duplicate = False
+        # Set the flag to duplicate if our dataset is a duplicate
+        if 'duplicate' in self.data_dir:
+            self.duplicate = True
+
     def read_file(self, input_filename):
         with open(input_filename, 'r') as file:
             return file.readlines()
+
+    def get_pair_num(self, file_name):
+        res = re.match(r'(\d+)_\d', file_name)
+        return res.group(1)
 
     def run(self):
         file_vectors = self.create_file_vectors(self.data_dir)
@@ -61,11 +72,14 @@ class File2Vec:
 
                 # Limit the number of files per class
                 if len(file_list) > self.k:
+                    print("File list over the limit, randomly selecting {} files...".format(self.k))
+                    random.seed(42)
                     file_list = random.sample(file_list, self.k)
-                
+
                 for file in file_list:
                     time0 = time.time()
                     method_vectors = []
+
                     # Split the file into its composing methods
                     methods = self.class_preprocessor.get_methods(os.path.join(folder_dir, class_val, file))
 
@@ -97,7 +111,8 @@ class File2Vec:
                         for i, method_prediction in enumerate(prediction_results):
                             method_vectors.append({"vector": code_vectors[i], "length": lines})
                         
-                    file_vectors.append({'methods': method_vectors, 'class_val': class_val, 'filename': file})
+                    file_vectors.append({'methods': method_vectors, 'class_val': class_val, 'filename': file,
+                                        'processed': False})
 
                     print(fileNum, file, "Time:", time.time() - time0)
                     fileNum += 1
@@ -105,6 +120,42 @@ class File2Vec:
         #os.remove(tmp_file_name)
         return file_vectors
 
+
+    def get_num_columns(self, file_vectors):
+        # Set up the dataframe values to hold the resulting dataset
+        num_columns = 0
+        for i in file_vectors:
+            if 'attributes' in i:
+                num_columns = len(i['attributes'])
+                break
+
+        return num_columns
+
+    def get_by_filename(self, filename, file_vectors):
+        for i in file_vectors:
+            if i['filename'] == filename:
+                return i
+
+    def get_pair(self, file, file_vectors):
+        if file['processed']:
+            return None
+
+        if not self.duplicate:
+            file['processed'] = True
+            return [file]
+
+        # Now find this files duplicate pair
+        pair_num = self.get_pair_num(file['filename'])
+        pair_filename1 = '{}_1.java'.format(pair_num)
+        pair_filename2 = '{}_2.java'.format(pair_num)
+
+        file_obj_1 = self.get_by_filename(pair_filename1, file_vectors)
+        file_obj_2 = self.get_by_filename(pair_filename2, file_vectors)
+
+        file_obj_1['processed'] = True
+        file_obj_2['processed'] = True
+
+        return [file_obj_1, file_obj_2]
 
     def run_pipeline(self, file_vectors):
         for func in all_func:
@@ -119,25 +170,35 @@ class File2Vec:
                         reduction_method=reduction_method)
 
 
-                    # dataset = []
-
                     for file_ in file_vectors:
-                        # Apply the aggregation function now we have collected all the individual vectors from each method
-                        aggregated = pipeline.aggregate_vectors(file_['methods'])
-                        if len(aggregated) > 0:
-                            file_['attributes'] = aggregated
-                            # dataset.append({'attributes': aggregated, 'class_val': file_vec['class_val'], 
-                                # 'filename': file_vec['filename']})
+                        paired_files = self.get_pair(file_, file_vectors)
+                        aggregated_vectors = []
 
-                    # Set up the dataframe values to hold the resulting dataset
-                    num_rows = len(file_vectors)
-                    num_columns = 0
-                    for i in file_vectors:
-                        if 'attributes' in i:
-                            num_columns = len(i['attributes'])
-                            break
+                        # paired_files is None if we've already visited this file
+                        if paired_files is not None:
+                            for paired_file in paired_files:
+                                # Apply the aggregation function now we have collected all the individual vectors from each method
+                                aggregated = pipeline.aggregate_vectors(paired_file['methods'])
+                                if len(aggregated) > 0:
+                                    aggregated_vectors.append(aggregated)
                             
-                    col_names = ['x{}'.format(i) for i in range(num_columns)] + ['filename', 'class_val']
+                            # Subtract the vectors for both files to give us our final vectors
+                            # If we only have one file then just use that
+                            # If we're in duplicate mode but we only get one of the two vectors then just ignore
+                            if len(aggregated_vectors) > 0:                       
+                                if self.duplicate and len(aggregated_vectors) == 2:
+                                    file_['attributes'] = np.subtract(aggregated_vectors[0], aggregated_vectors[1])
+                                elif not self.duplicate:
+                                    file_['attributes'] = aggregated_vectors[0]
+                                else:
+                                    print(file_)
+
+
+                        
+                    # Set up the dataframe values to hold the resulting dataset
+                    columns = self.get_num_columns(file_vectors)
+                            
+                    col_names = ['x{}'.format(i) for i in range(columns)] + ['filename', 'class_val']
 
                     # Now we want to generate the dataframe from the aggregated results
                     rows_list = []
@@ -155,9 +216,6 @@ class File2Vec:
                             rows_list.append(dict1)
 
                     df = pd.DataFrame(data=rows_list, columns=col_names)   
-
-                    # with open('dataset.csv', newline='', mode='w') as out_file:
-                    #     df.to_csv(out_file, index=False)
 
                     # Write the resulting vectors to an arff file
                     pipeline.process_dataset(df)
