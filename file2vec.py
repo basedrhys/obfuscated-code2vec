@@ -157,6 +157,11 @@ class File2Vec:
 
         return [file_obj_1, file_obj_2]
 
+    def reset_file_vectors(self, file_vectors):
+        for f in file_vectors:
+            f['processed'] = False
+            f.pop('attributes', None)
+
     def run_pipeline(self, file_vectors):
         for func in all_func:
             for selection_method in selection_methods:
@@ -169,6 +174,7 @@ class File2Vec:
                         selection_method=selection_method,
                         reduction_method=reduction_method)
 
+                    self.reset_file_vectors(file_vectors)
 
                     for file_ in file_vectors:
                         paired_files = self.get_pair(file_, file_vectors)
@@ -193,8 +199,7 @@ class File2Vec:
                                 else:
                                     print(file_)
 
-
-                        
+       
                     # Set up the dataframe values to hold the resulting dataset
                     columns = self.get_num_columns(file_vectors)
                             
