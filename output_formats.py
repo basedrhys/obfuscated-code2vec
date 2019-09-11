@@ -44,7 +44,7 @@ class ARFFFile:
         # self.df['concat'] = pd.Series(self.df.values.tolist()).map(lambda x: ','.join(map(sanitize,x)))
         # for i, row in self.df.iterrows():
         #     self.write_line(file, row['concat'])
-        df.to_csv(file, header=False, index=False)
+        self.df.to_csv(file, header=False, index=False)
 
     def write_to_file(self):
         full_output_path = os.path.join(output_folder, self.dataset_name)
