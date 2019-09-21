@@ -41,6 +41,7 @@ class ARFFFile:
 
     def write_data(self, file):
         self.write_line(file, "\n\n@DATA")
+        self.df['filename'] = self.df['filename'].apply(sanitize)
         # self.df['concat'] = pd.Series(self.df.values.tolist()).map(lambda x: ','.join(map(sanitize,x)))
         # for i, row in self.df.iterrows():
         #     self.write_line(file, row['concat'])
