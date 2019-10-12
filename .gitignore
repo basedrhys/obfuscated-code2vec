@@ -3,6 +3,7 @@ models/
 
 # Datasets
 java_files/
+text_arff/
 
 # Weka files
 weka_files/

@@ -10,7 +10,7 @@ else:
 
 weka_df = pd.read_csv(results_loc)
 
-new_df = pd.DataFrame(columns=['model', 'selection_method', 'agg_method', 'reduction_method', 'run', 'fold', 'accuracy'])
+new_df = pd.DataFrame(columns=['model', 'selection_method', 'aggregation_method', 'reduction_method', 'run', 'fold', 'accuracy'])
 
 for i, row in weka_df.iterrows():
     split = row['Key_Dataset'].split('_')
