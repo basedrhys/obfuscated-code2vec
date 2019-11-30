@@ -333,29 +333,49 @@ class VectorMinMeanMax(AbstractVectorAggregator):
     def name():
         return "minMeanMax"
 
+class VectorAllMethods(AbstractVectorAggregator):
+
+    def __init__(self, vectors):
+        super().__init__(vectors)
+
+    def aggregate(self):
+        return np.concatenate((
+            np.min(self.vectors, 0),
+            np.max(self.vectors, 0),
+            np.mean(self.vectors, 0),
+            np.median(self.vectors, 0),
+            np.std(self.vectors, 0), 
+            np.sum(self.vectors, 0)), 
+            axis=0)
+
+    @staticmethod
+    def name():
+        return "AllMethods"
+
 # agg_functions2 = [fx.VectorMax, fx.VectorMean, fx.VectorMed, fx.VectorMin, fx.VectorStdDev, fx.VectorSum]
 
 all_func = [
+  VectorAllMethods,
   VectorMinMeanMax,
-  #VectorMax,
-  #VectorMean,
-  #VectorMed,
-  #VectorMin,
-  #VectorStdDev,
-  #VectorSum,
-  #VectorMaxMean,
-  #VectorMaxMed,
-  #VectorMaxMin,
-  #VectorMaxStdDev,
-  #VectorMaxSum,
-  #VectorMeanMed,
-  #VectorMeanMin,
-  #VectorMeanStdDev,
-  #VectorMeanSum,
-  #VectorMedMin,
-  #VectorMedStdDev,
-  #VectorMedSum,
-  #VectorMinStdDev,
-  #VectorMinSum,
-  #VectorStdDevSum,
+  VectorMax,
+  VectorMean,
+  VectorMed,
+  VectorMin,
+  VectorStdDev,
+  VectorSum,
+  VectorMaxMean,
+  VectorMaxMed,
+  VectorMaxMin,
+  VectorMaxStdDev,
+  VectorMaxSum,
+  VectorMeanMed,
+  VectorMeanMin,
+  VectorMeanStdDev,
+  VectorMeanSum,
+  VectorMedMin,
+  VectorMedStdDev,
+  VectorMedSum,
+  VectorMinStdDev,
+  VectorMinSum,
+  VectorStdDevSum,
 ]
