@@ -21,8 +21,9 @@ if __name__ == '__main__':
 
     # For each dataset in our collection of them, run the model on it
     for dataset in os.listdir(dataset_dir):
-        print("Processing dataset:", dataset)
-        file2vec = File2Vec(config, modelObj, modelDef, dataset)
-        file2vec.run()
+        if os.path.isdir(os.path.join(dataset_dir, dataset)):
+            print("Processing dataset:", dataset)
+            file2vec = File2Vec(config, modelObj, modelDef, dataset)
+            file2vec.run()
 
     modelObj.close_session()

@@ -8,6 +8,9 @@ text_arff/*
 # Weka files
 weka_files/*
 
+# Keep readme files
+!**/README.md
+
 */.DS_STORE
 .DS_STORE
 
