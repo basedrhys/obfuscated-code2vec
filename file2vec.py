@@ -56,11 +56,11 @@ class File2Vec:
         return res.group(1)
 
     def run(self):
-        file_vectors = self.create_file_vectors(self.data_dir)
+        file_vectors = self.create_file_vectors()
         self.run_pipeline(file_vectors)
 
-    def create_file_vectors(self, folder_dir):
-        folder_dir = os.path.join(dataset_dir, folder_dir)
+    def create_file_vectors(self):
+        folder_dir = os.path.join(dataset_dir, self.data_dir)
         file_vectors = []
         fileNum = 0
         # Loop through each class value
@@ -81,7 +81,7 @@ class File2Vec:
                     method_vectors = []
 
                     # Split the file into its composing methods
-                    methods = self.class_preprocessor.get_methods(os.path.join(folder_dir, class_val, file))
+                    methods = self.class_preprocessor.get_methods(os.path.join(class_folder, file))
 
                     # for each of it's composing methods
                     for method in methods:

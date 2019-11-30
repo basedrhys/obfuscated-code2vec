@@ -42,8 +42,8 @@ class AbstractUMap(AbstractReductionMethod):
     feat_cols = ["x{}".format(i) for i in range(embedding.shape[1])]
 
     return_df = pd.DataFrame(data=embedding, columns = feat_cols)
+    return_df['filename'] = self.df['filename']
     return_df['class_val'] = self.df['class_val']
-    
     return return_df
 
 class UMapReduction25(AbstractUMap):
@@ -80,8 +80,8 @@ class UMapReduction250(AbstractUMap):
 
 reduction_methods = [
   NoReduction,
-  #UMapReduction25,
-  #UMapReduction50,
-  #UMapReduction100,
-  #UMapReduction250
+  UMapReduction25,
+  UMapReduction50,
+  UMapReduction100,
+  UMapReduction250
 ]
