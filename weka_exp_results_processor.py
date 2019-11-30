@@ -10,7 +10,7 @@ else:
 
 weka_df = pd.read_csv(results_loc)
 
-new_df = pd.DataFrame(columns=['model', 'selection_method', 'aggregation_method', 'reduction_method', 'run', 'fold', 'accuracy'])
+new_df = pd.DataFrame(columns=['model', 'selection_method', 'aggregation_method', 'reduction_method', 'run', 'fold', 'kappa'])
 
 for i, row in weka_df.iterrows():
     split = row['Key_Dataset'].split('_')
@@ -21,7 +21,7 @@ for i, row in weka_df.iterrows():
 
     run = row['Key_Run']
     fold = row['Key_Fold']
-    accuracy = row['Percent_correct']
+    kappa = row['Kappa_statistic']
 
     new_df = new_df.append({
         'model': model,
@@ -30,7 +30,7 @@ for i, row in weka_df.iterrows():
         'reduction_method': reduction_method,
         'run' : run,
         'fold' : fold,
-        'accuracy': accuracy,
+        'kappa': kappa,
     }, ignore_index=True)
 
 with open(output_file, newline='', mode='w') as out_file:
