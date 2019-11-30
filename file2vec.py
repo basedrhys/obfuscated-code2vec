@@ -15,7 +15,7 @@ from ClassPreprocessor import ClassPreprocessor
 from aggregation_pipeline import AggregationPipeline
 import pandas as pd
 import numpy as np
-# from main import dataset_dir
+
 dataset_dir = 'java_files'
 
 SHOW_TOP_CONTEXTS = 10

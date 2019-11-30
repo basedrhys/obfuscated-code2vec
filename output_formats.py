@@ -42,9 +42,6 @@ class ARFFFile:
     def write_data(self, file):
         self.write_line(file, "\n\n@DATA")
         self.df['filename'] = self.df['filename'].apply(sanitize)
-        # self.df['concat'] = pd.Series(self.df.values.tolist()).map(lambda x: ','.join(map(sanitize,x)))
-        # for i, row in self.df.iterrows():
-        #     self.write_line(file, row['concat'])
         self.df.to_csv(file, header=False, index=False)
 
     def write_to_file(self):
@@ -73,13 +70,3 @@ class ARFFFile:
 
             # Write the actual data
             self.write_data(open_file)
-
-
-# rows = [[1, 2, 3, 4, 5, '(a,12).jpg', 'a'] for x in range(10)]
-
-# cols = ['x{}'.format(x) for x in range(5)] + ['filename', 'class_val']
-
-# df = pd.DataFrame(data=rows, columns=cols)
-
-# arff = ARFFFile('test_data', 'test_model', 'all', 'none', 'reduce', df)
-# arff.write_to_file()

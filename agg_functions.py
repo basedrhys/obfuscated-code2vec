@@ -352,8 +352,6 @@ class VectorAllMethods(AbstractVectorAggregator):
     def name():
         return "AllMethods"
 
-# agg_functions2 = [fx.VectorMax, fx.VectorMean, fx.VectorMed, fx.VectorMin, fx.VectorStdDev, fx.VectorSum]
-
 all_func = [
   VectorAllMethods,
   VectorMinMeanMax,

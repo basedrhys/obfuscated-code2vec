@@ -1,3 +1,8 @@
+'''
+Run this on the output csv from the WEKA experimenter, to convert it into a more usable format
+i.e. with only the columns we care about - model type, aggregation pipeline parameters, and accuracy (kappa)
+'''
+
 import os
 import pandas as pd
 import sys

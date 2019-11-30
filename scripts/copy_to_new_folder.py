@@ -1,3 +1,9 @@
+'''
+Create the reduced dataset - if a file exists in the obfuscated folder, 
+copy the original file (not obfuscated) to the target folder
+'''
+
+
 import os
 from shutil import copyfile
 
