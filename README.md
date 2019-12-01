@@ -1,13 +1,28 @@
 # Obsucated code2vec: Improving Generalisation by Hiding Information
 
-## Instructions
-To 
+![Overall project view](img/overall.png)
+
+Code for the paper: *Obsucated code2vec: Improving Generalisation by Hiding Information*
+
+This repository contains code for the dataset pipeline, as well as the obfuscation tool used for obfuscating the datasets.
 
 All of the model-related code (`common.py`, `model.py`, `PathContextReader.py`) as well as the `JavaExtractor` folder is code from the original [code2vec repository](https://github.com/tech-srl/code2vec). This was used for invoking the trained code2vec models to create method embeddings.
 
 All models/datasets are on the paper google drive folder
 https://drive.google.com/drive/u/1/folders/1CXgSXKf292BTlryASui2kBvYvJSvFnWN
 
+## Usage - Dataset Pipeline
+
+![Dataset Pipeline View](img/pipeline.png)
+
+To run the dataset pipeline and create class-level embeddings for a dataset of Java files:
+1. Download a `.java` dataset (from the datasets supplied or your own) and put in the `java_files/` directory
+2. Download a code2vec model checkpoint and put the checkpoint folder in the `models/` directory
+3. Change the paths and definitions in `model_defs.py` and number of models in `create_datasets.sh` to match your setup
+4. Run `create_datasets.sh`. This will loop through each model and create class-level embeddings for the supplied datasets. The resulting datasets will be in `.arff` format in the `weka_files/` folder
+
+### Config
+By default the pipeline will use the full range of values for each parameter, which creates a huge number of resulting `.arff` datasets (>1000). To reduce the number of these, remove (or comment out) some of the items in the arrays in `reduction_methods.py` and `selection_methods.py` (at the end of the file). Our experiments showed that the `SelectAll` selection method and `NoReduction` reduction method performed best in most cases so you may want to keep only these.
 
 ## Datasets
 
