@@ -2,7 +2,7 @@
 
 ![Overall project view](img/overall.png)
 
-Code for the paper: *Obsucated code2vec: Improving Generalisation by Hiding Information*
+Code for the paper: *Obfsucated code2vec: Improving Generalisation by Hiding Information*
 
 This repository contains code for the dataset pipeline, as well as the obfuscation tool used for obfuscating the datasets.
 
