@@ -1,4 +1,4 @@
-# Obsucated code2vec: Reducing Model Bias by Hiding Information
+# Obfsucated code2vec: Reducing Model Bias by Hiding Information
 
 ![Overall project view](img/overall.png)
 
