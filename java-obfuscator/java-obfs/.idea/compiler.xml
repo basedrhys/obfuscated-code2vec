@@ -9,8 +9,8 @@
         <module name="java-obfs" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.8">
-      <module name="java-obfs" target="1.5" />
+    <bytecodeTargetLevel>
+      <module name="java-obfs" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

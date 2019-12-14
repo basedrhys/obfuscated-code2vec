@@ -31,7 +31,7 @@ public class SpoonRunner {
     public static void main (String[] args) {
         Options options = new Options();
 
-        Option s = new Option("s", "source", true, "Source folder for java files");
+        Option s = new Option("s", "source", true, "Source file/folder for java files");
         s.setRequired(true);
         options.addOption(s);
 
@@ -125,8 +125,6 @@ public class SpoonRunner {
                 obfuscating = true;
             }
 
-//            ClassPreprocessor classPreprocessor = new ClassPreprocessor(inputFile);
-//            classPreprocessor.process();
             FileObfuscator obfuscator = new FileObfuscator("", inputFile);
             obfuscator.run();
         }
