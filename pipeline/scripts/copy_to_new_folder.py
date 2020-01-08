@@ -7,9 +7,9 @@ copy the original file (not obfuscated) to the target folder
 import os
 from shutil import copyfile
 
-source_folder = 'A:\Rhys\Documents\java-xs'
-target_folder = 'A:\Rhys\Documents\java-xs-new'
-obfuscated_folder = 'A:\Rhys\Documents\java-xs-obfs'
+source_folder = '' # original folder of java files
+target_folder = '' # where do we want them to be copied to
+obfuscated_folder = '' # the folder of obfuscated files
 
 file_count = 0
 
