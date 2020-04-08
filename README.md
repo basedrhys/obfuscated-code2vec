@@ -2,11 +2,11 @@
 
 ![Overall project view](img/overall.png)
 
-Code for the paper: *Embedding Java Classes with code2vec: Improvements from Variable Obfuscation* (paper link coming soon!)
+This repository contains the java obfuscation tool created with [Spoon](https://github.com/INRIA/spoon) and the dataset pipeline as described in: 
 
-This repository contains links to all data and models used in the paper, code for the dataset pipeline, as well as the obfuscation tool used for obfuscating the datasets.
+[Rhys Compton](https://www.rhyscompton.co.nz/), [Eibe Frank](https://www.cs.waikato.ac.nz/~eibe/), [Panos Patros](https://www.cms.waikato.ac.nz/people/ppatros), and [Abigail Koay](https://www.waikato.ac.nz/staff-profiles/people/akoay) - *Embedding Java Classes with code2vec: Improvements from Variable Obfuscation*, in MSR '20 [[ArXiv Preprint]](https://arxiv.org/abs/2004.02942)
 
-All of the model-related code (`common.py`, `model.py`, `PathContextReader.py`) as well as the `JavaExtractor` folder is code from the original [code2vec repository](https://github.com/tech-srl/code2vec). This was used for invoking the trained code2vec models to create method embeddings - using the code2vec model as a feature extractor.
+Also included are all models and data used in the paper for reproducing/further research.
 
 ## Requirements
 - Java 8+
@@ -24,7 +24,9 @@ This will result in a new obfuscated folder of `.java` files, that can be used t
 
 ![Dataset Pipeline View](img/pipeline.png)
 
-These steps will convert a classification dataset of `.java` files into a numerical form (`.arff` by default), that can then be used with any standard WEKA classifier.
+The pipeline uses a trained code2vec model as a feature extractor, converting a classification dataset of `.java` files into a numerical form (`.arff` by default), that can then be used as input for any standard classifier.
+
+All of the model-related code (`common.py`, `model.py`, `PathContextReader.py`) as well as the `JavaExtractor` folder is code from the original [code2vec repository](https://github.com/tech-srl/code2vec). This was used for invoking the trained code2vec models to create method embeddings - using the code2vec model as a feature extractor.
 
 The dataset should be in the form of those supplied with this paper i.e.:
 ```
@@ -44,27 +46,27 @@ dataset_name
 To run the dataset pipeline and create class-level embeddings for a dataset of Java files:
 1. `cd pipeline`
 2. `pip install -r requirements.txt`
-1. Download a `.java` dataset (from the datasets supplied or your own) and put in the `java_files/` directory
-2. Download a code2vec model checkpoint and put the checkpoint folder in the `models/` directory
-3. Change the paths and definitions in `model_defs.py` and number of models in `scripts/create_datasets.sh` to match your setup
-4. Run `create_datasets.sh` (`source scripts/create_datasets.sh`). This will loop through each model and create class-level embeddings for the supplied datasets. The resulting datasets will be in `.arff` format in the `weka_files/` folder. 
+3. Download a `.java` dataset (from the datasets supplied or your own) and put in the `java_files/` directory
+4. Download a code2vec model checkpoint and put the checkpoint folder in the `models/` directory
+5. Change the paths and definitions in `model_defs.py` and number of models in `scripts/create_datasets.sh` to match your setup
+6. Run `create_datasets.sh` (`source scripts/create_datasets.sh`). This will loop through each model and create class-level embeddings for the supplied datasets. The resulting datasets will be in `.arff` format in the `weka_files/` folder. 
 
 You can now perform class-level classification on the dataset using any off-the-shelf WEKA classifier.
 
 ### Config
 By default the pipeline will use the full range of values for each parameter, which creates a huge number of resulting `.arff` datasets (>1000). To reduce the number of these, remove (or comment out) some of the items in the arrays in `reduction_methods.py` and `selection_methods.py` (at the end of the file). Our experiments showed that the `SelectAll` selection method and `NoReduction` reduction method performed best in most cases so you may want to just keep these.
 
-## Models
+## Trained code2vec Models
 
-The models can all be downloaded [from zenodo](https://zenodo.org/record/3577367).
+The models are all available for download: [Zenodo Link](https://zenodo.org/record/3577367).
 
 The `.java` datasets used to train each of the models (different versions of `java-large` from the [code2seq repository](https://github.com/tech-srl/code2seq)), as well as the preprocessed code2vec-ready versions of those datasets are also available: [Google Drive Link](https://drive.google.com/open?id=1CXgSXKf292BTlryASui2kBvYvJSvFnWN)
 
 ## Datasets
 
-The `.java` datasets are all [available for download](https://zenodo.org/record/3575197). 
+The `.java` datasets collated for this research are all available for download: [Zenodo Link](https://zenodo.org/record/3575197). 
 
-For the interactive embedding visualisations, best results are often seen by UMAP.
+For the interactive embedding visualisation links below, best results are often seen by UMAP.
 
 Class distributions shown below generated by [WEKA](https://www.cs.waikato.ac.nz/ml/weka/)
 
