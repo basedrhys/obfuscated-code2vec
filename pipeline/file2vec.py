@@ -46,6 +46,7 @@ class File2Vec:
         self.duplicate = False
         # Set the flag to duplicate if our dataset is a duplicate
         if 'duplicate' in self.data_dir:
+            print("DUPLICATE FLAG SET TO TRUE")
             self.duplicate = True
 
     def read_file(self, input_filename):
@@ -101,9 +102,12 @@ class File2Vec:
                         try:
                             predict_lines, hash_to_string_dict = self.path_extractor.extract_paths(tmp_file_name)
                         except ValueError as e:
-                            print(e)
+                            print("=====================")
                             if debug:
-                                print("Error for method {} in file {}".format(method, file))
+                                print("Error for method {} in file {}. Note this may simply be caused by the method being a constructor".format(method, file))
+                            print("\nException message:\n")
+                            print(e)
+                            print("=====================")
                             continue
 
                         results, code_vectors = self.model.predict(predict_lines)
@@ -116,7 +120,7 @@ class File2Vec:
                     file_vectors.append({'methods': method_vectors, 'class_val': class_val, 'filename': file,
                                         'processed': False})
 
-                    print(fileNum, file, "Time:", time.time() - time0)
+                    print("#{}\t{}\tTime: {}s".format(fileNum, file, round(time.time() - time0, 3)))
                     fileNum += 1
             
         os.remove(tmp_file_name)
