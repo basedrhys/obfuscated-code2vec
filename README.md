@@ -8,13 +8,17 @@ This repository contains the java obfuscation tool created with [Spoon](https://
 
 Also included are all models and data used in the paper for reproducing/further research.
 
+## Downloadable Assets
+- [Trained Models](https://zenodo.org/record/3577367)
+- [Evaluation datasets](https://zenodo.org/record/3575197)
+
 ## Requirements
 - Java 8+
 - Python 3
 
 ## Usage - Obfuscator
 1. `cd java-obfuscator`
-1. Locate a folder of `.java` files (e.g., from the [code2seq](https://github.com/tech-srl/code2seq) repository)
+1. Locate a folder of `.java` files (e.g., from the [code2seq](https://github.com/tech-srl/code2seq#datasets) repository)
 2. Alter the input and output directories in `obfs-script.sh`, as well as the number of threads of your machine. If you're running this on a particularly large folder (e.g., millions of files) then you may need to increase the `NUM_PARTITIONS` to 3 or 4, otherwise memory issues can occur, grinding the obfuscator to a near halt.
 3. Run `obfs-script.sh` i.e. `$ source obfs-script.sh`
 
@@ -51,7 +55,7 @@ To run the dataset pipeline and create class-level embeddings for a dataset of J
 5. Change the paths and definitions in `model_defs.py` and number of models in `scripts/create_datasets.sh` to match your setup
 6. Run `create_datasets.sh` (`source scripts/create_datasets.sh`). This will loop through each model and create class-level embeddings for the supplied datasets. The resulting datasets will be in `.arff` format in the `weka_files/` folder. 
 
-You can now perform class-level classification on the dataset using any off-the-shelf WEKA classifier.
+You can now perform class-level classification on the dataset using any off-the-shelf WEKA classifier. Note that the dataset contains the original filename as a string attribute for debugging purposes; you'll likely need to remove this attribute before you pass the dataset into a classifier.
 
 ### Config
 By default the pipeline will use the full range of values for each parameter, which creates a huge number of resulting `.arff` datasets (>1000). To reduce the number of these, remove (or comment out) some of the items in the arrays in `reduction_methods.py` and `selection_methods.py` (at the end of the file). Our experiments showed that the `SelectAll` selection method and `NoReduction` reduction method performed best in most cases so you may want to just keep these.
