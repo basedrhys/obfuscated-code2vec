@@ -8,6 +8,16 @@ This repository contains the java obfuscation tool created with [Spoon](https://
 
 Also included are all models and data used in the paper for reproducing/further research.
 
+Table of Contents
+=================
+- [Downloadable Assets](#downloadable-assets)
+- [Requirements](#requirements)
+- [Usage - Obfuscator](#usage-obfuscator)
+- [Usage - Dataset Pipeline](#usage-dataset-pipeline)
+- [Trained code2vec Models](#trained-code2vec-models)
+- [Datasets](#datasets)
+- [Citation](#citation)
+
 ## Downloadable Assets
 - [Trained Models](https://zenodo.org/record/3577367)
 - [Evaluation datasets](https://zenodo.org/record/3575197)
@@ -16,7 +26,7 @@ Also included are all models and data used in the paper for reproducing/further 
 - Java 8+
 - Python 3
 
-## Usage - Obfuscator
+## Usage: Obfuscator
 1. `cd java-obfuscator`
 1. Locate a folder of `.java` files (e.g., from the [code2seq](https://github.com/tech-srl/code2seq#datasets) repository)
 2. Alter the input and output directories in `obfs-script.sh`, as well as the number of threads of your machine. If you're running this on a particularly large folder (e.g., millions of files) then you may need to increase the `NUM_PARTITIONS` to 3 or 4, otherwise memory issues can occur, grinding the obfuscator to a near halt.
@@ -24,7 +34,7 @@ Also included are all models and data used in the paper for reproducing/further 
 
 This will result in a new obfuscated folder of `.java` files, that can be used to train a new obfuscated code2vec model (or any model that performs learning from source code for that matter).
 
-## Usage - Dataset Pipeline
+## Usage: Dataset Pipeline
 
 ![Dataset Pipeline View](img/pipeline.png)
 
@@ -134,3 +144,26 @@ Can't share dataset for security reasons, however, you can request it from the o
 #### Notes
 
 `*` - 2000 samples per class were randomly sampled during experiments, so the results in the paper are reported on a smaller dataset. The downloadable dataset is the full version. 
+
+## Citation
+
+[Embedding Java Classes with code2vec: Improvements from Variable Obfuscation](https://arxiv.org/pdf/2004.02942.pdf)
+
+```
+@inproceedings{10.1145/3379597.3387445,
+author = {Compton, Rhys and Frank, Eibe and Patros, Panos and Koay, Abigail},
+title = {Embedding Java Classes with Code2vec: Improvements from Variable Obfuscation},
+year = {2020},
+isbn = {9781450375177},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3379597.3387445},
+doi = {10.1145/3379597.3387445},
+booktitle = {Proceedings of the 17th International Conference on Mining Software Repositories},
+pages = {243–253},
+numpages = {11},
+keywords = {machine learning, code obfuscation, neural networks, code2vec, source code},
+location = {Seoul, Republic of Korea},
+series = {MSR '20}
+}
+```
